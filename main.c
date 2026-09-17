@@ -120,6 +120,37 @@ void displayWards()
     printf("========================================================================================\n");
 }
 
+void displayBedAvailability()
+{
+    printf("\n");
+    printf("============================================================\n");
+    printf("                    BED AVAILABILITY\n");
+    printf("============================================================\n");
+
+    for (int i = 0; i < WARD_ID; i++)
+    {
+    printf("\n%d.%s\n",i+1,wardName[i]);
+    printf("============================================================\n");
+
+        for (int j = 0; j < totalBedCapacity[i]; j++)
+        {
+            if (bedOccupancy[i][j] == 0)
+            {
+                printf("Bed #%02d : Available\n", j + 1);
+            }
+            else
+            {
+                printf("Bed #%02d : Occupied\n", j + 1);
+            }
+        }
+    }
+
+    printf("\n============================================================\n");
+}
+
+
+
+
 int main()
 {
     /*Test readValidInteger function
@@ -131,6 +162,9 @@ int main()
 
     /*Test displayWards function
      displayWards();*/
+
+    /*Test displayBedAvailability function
+    displayBedAvailability();*/
 
     return 0;
 }
