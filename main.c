@@ -32,7 +32,41 @@
     int bedOccupancy[WARD_ID][MAX_BEDS]={0};
     int specialtyQueueCount[SPECIALTY_ID]={0};
 
+
+    int readValidInteger(const char *userPrompt, int minimumValue, int maximumValue)
+{
+    int inputValue;
+
+    int valid=0;
+    do
+    {
+        printf("%s",userPrompt);
+
+        scanf("%d", &inputValue);
+
+        if (inputValue < minimumValue|| inputValue > maximumValue)
+        {
+            printf("Invalid input. Please enter a value between %d and %d.\n",
+                   minimumValue, maximumValue);
+        }
+        else
+        {
+            valid = 1;
+        }
+    }
+    while (valid == 0);
+
+    return inputValue;
+}
+
+
+
 int main()
 {
+    /*Test readValidInteger function*/
+    int age = readValidInteger("Enter your age: ", 1, 60);
+    printf(" Your age is: %d\n", age);
+
+
     return 0;
 }
