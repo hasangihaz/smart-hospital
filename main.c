@@ -59,13 +59,43 @@
     return inputValue;
 }
 
+void displaySpecialties()
+{
+    printf("\n");
+    printf("=========================================================================================================\n");
+    printf("                                      DOCTOR SPECIALTIES DATA\n");
+    printf("=========================================================================================================\n");
+
+
+    printf("|%-12s | %-25s | %-21s | %-17s | %s|\n",
+           "Specialty ID", "Specialty Name", "Consultation Fee(LKR)", "Consultation Time", "Patient Capacity");
+
+    printf("---------------------------------------------------------------------------------------------------------\n");
+
+    for (int i = 0; i < SPECIALTY_ID; i++)
+    {
+
+        printf("|     %2d      | %-25s | %21.2f | %12d mins | %d (Reserved: %d)|\n",
+                i + 1,
+               specialtyName[i],
+               consultationFee[i],
+               consultationTimeInMinute[i],
+               dailyPatientCapacity[i],
+               specialtyQueueCount[i]);
+    }
+
+    printf("=========================================================================================================\n");
+}
 
 
 int main()
 {
-    /*Test readValidInteger function*/
+    /*Test readValidInteger function
     int age = readValidInteger("Enter your age: ", 1, 60);
-    printf(" Your age is: %d\n", age);
+    printf(" Your age is: %d\n", age);*/
+
+    /*Test displaySpecialties function
+    displaySpecialties();*/
 
 
     return 0;
