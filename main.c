@@ -30,6 +30,7 @@
 
     //Bed Status Tracking
     int bedOccupancy[WARD_ID][MAX_BEDS]={0};
+    int specialtyQueueCount[SPECIALTY_ID]={0};
 
 int main()
 {
