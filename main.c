@@ -1,19 +1,24 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
-int main()
-{
+#define MAX_PATIENTS 100
+#define SPECIALTY_ID 4
+#define WARD_ID 4
+#define MAX_BEDS 20
+
+
+
    //Doctor specialized data
-   char specialtyName[4][50]={"General Practice(OPD)","Paediatrics ","Cardiology","Neurology"};
-   float consultationFee[4]={1500.00,2500.00,4500.00,5000.00};
-   int consultationTimeInMinute[4]={15,20,30,30};
-   int dailyPatientCapacity[4]={30,20,12,10};
+   const char specialtyName[SPECIALTY_ID][50]={"General Practice(OPD)","Paediatrics ","Cardiology","Neurology"};
+   const float consultationFee[SPECIALTY_ID]={1500.00,2500.00,4500.00,5000.00};
+   const int consultationTimeInMinute[SPECIALTY_ID]={15,20,30,30};
+   const int dailyPatientCapacity[SPECIALTY_ID]={30,20,12,10};
    //Hospital wards data
-   char wardName[4][50]={"General Ward","Paediatric Ward","Surgical Ward","ICU(Intensive Care Unit)"};
-   float dailyBedRate[4]={3000.00,6000.00,12000.00,25000.00};
-   int totalBedCapacity[4]={20,10,10,5};
+   const char wardName[WARD_ID][50]={"General Ward","Paediatric Ward","Surgical Ward","ICU(Intensive Care Unit)"};
+   const float dailyBedRate[WARD_ID]={3000.00,6000.00,12000.00,25000.00};
+   const int totalBedCapacity[WARD_ID]={20,10,10,5};
 
-   //Test step 1
+   /*Test step 1
     printf("Specialty Name ID 1: %s\n", specialtyName[0]);
     printf("Base Consultation Fee: %.2f\n", consultationFee[0]);
     printf("Consultation Time: %d mins\n",consultationTimeInMinute[0]);
@@ -21,8 +26,12 @@ int main()
     printf("\n");
     printf("Ward Name ID 4: %s\n", wardName[3]);
     printf("Daily Bed Rate: %.2f\n",dailyBedRate[3]);
-    printf("Total Bed Capacity: %02d\n",totalBedCapacity[3]);
+    printf("Total Bed Capacity: %02d\n",totalBedCapacity[3]);*/
 
+    //Bed Status Tracking
+    int bedOccupancy[WARD_ID][MAX_BEDS]={0};
 
+int main()
+{
     return 0;
 }
