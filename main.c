@@ -37,6 +37,8 @@ int assignedBed[MAX_PATIENTS];
 int admissionStatus[MAX_PATIENTS];
 int assignedWard[MAX_PATIENTS];
 int stayDuration[MAX_PATIENTS];
+int assignedSpecialty[MAX_PATIENTS];
+int patientWaitTime[MAX_PATIENTS];
 
 
 int readValidInteger(const char *userPrompt, int minimumValue, int maximumValue)
@@ -156,7 +158,7 @@ void displayBedAvailability()
 
 
 
-int getAvailableBed(int wardID)
+int getAvailableBed(int wardId)
 {
    for (int bed = 0; bed < totalBedCapacity[wardID]; bed++)
     {
@@ -172,12 +174,12 @@ int getAvailableBed(int wardID)
 
 void assignPatientBed(int patientId)
 {
-    int wardID = assignedWard[patientID];
+    int wardID = assignedWard[patientId];
     int bed = getAvailableBed(wardID);
 
     if (bed != -1)
     {
-        patientBed[patientId] = bed;
+        assignedBed[patientId] = bed;
         bedOccupancy[wardID][bed] = 1;
 
         printf("\nBed allocated successfully.\n");
@@ -195,6 +197,18 @@ void assignPatientBed(int patientId)
     }
 }
 
+void calculateWaitingTime(int patientId)
+{
+    int specialtyId = patientSpecialty[patientId];
+    int currentQueueCountForSpecialty = specialtyQueueCount[specialtyId];
+    int averageTimePerPatient = consultationTimeInMinute[specialtyId];
+
+
+    int totalWaitTime = currentQueueCountForSpecialty*averageTimePerPatient;
+    patientWaitTime[patientId] = totalWaitTime;
+
+    specialtyQueueCount[specialtyId]++;
+}
 
 int main()
 {
