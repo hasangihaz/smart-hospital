@@ -39,7 +39,9 @@ int assignedWard[MAX_PATIENTS];
 int stayDuration[MAX_PATIENTS];
 int assignedSpecialty[MAX_PATIENTS];
 int patientWaitTime[MAX_PATIENTS];
-
+int getEmergencyLevel[MAX_PATIENTS];
+float consultationBaseFee[MAX_PATIENTS];
+float emergencySurcharge[MAX_PATIENTS];
 
 int readValidInteger(const char *userPrompt, int minimumValue, int maximumValue)
 {
@@ -158,11 +160,11 @@ void displayBedAvailability()
 
 
 
-int getAvailableBed(int wardId)
+int getAvailableBed(int wardIndex)
 {
-   for (int bed = 0; bed < totalBedCapacity[wardID]; bed++)
+   for (int bed = 0; bed < totalBedCapacity[wardIndex]; bed++)
     {
-        if (bedOccupancy[wardID][bed] == 0)
+        if (bedOccupancy[wardIndex][bed] == 0)
         {
             return bed;
         }
@@ -174,13 +176,13 @@ int getAvailableBed(int wardId)
 
 void assignPatientBed(int patientId)
 {
-    int wardID = assignedWard[patientId];
-    int bed = getAvailableBed(wardID);
+    int wardIndex= assignedWard[patientId];
+    int bed = getAvailableBed(wardIndex);
 
     if (bed != -1)
     {
         assignedBed[patientId] = bed;
-        bedOccupancy[wardID][bed] = 1;
+        bedOccupancy[wardIndex][bed] = 1;
 
         printf("\nBed allocated successfully.\n");
         printf("Assigned Bed : #%02d\n", bed + 1);
@@ -199,7 +201,7 @@ void assignPatientBed(int patientId)
 
 void calculateWaitingTime(int patientId)
 {
-    int specialtyId = patientSpecialty[patientId];
+    int specialtyId = assignedSpecialty[patientId];
     int currentQueueCountForSpecialty = specialtyQueueCount[specialtyId];
     int averageTimePerPatient = consultationTimeInMinute[specialtyId];
 
@@ -209,6 +211,34 @@ void calculateWaitingTime(int patientId)
 
     specialtyQueueCount[specialtyId]++;
 }
+
+ float calculateSurcharge(int patientId)
+ {
+     float surcharge=0.0;
+     float baseFee=consultationBaseFee[patientId];
+     int urgencyLevel=getEmergencyLevel[patientId];
+
+     switch(urgencyLevel)
+                {
+              case 1:
+                surcharge=0.0;
+                break;
+
+              case 2:
+                surcharge=baseFee*0.2;
+                break;
+              case 3:
+                surcharge=baseFee*0.5;
+                break;
+
+              default:
+                surcharge=0.0;
+                break;
+                }
+
+     return surcharge;
+ }
+
 
 int main()
 {
