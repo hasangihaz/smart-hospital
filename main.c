@@ -32,6 +32,12 @@ const int totalBedCapacity[WARD_ID]= {20,10,10,5};
 int bedOccupancy[WARD_ID][MAX_BEDS]= {0};
 int specialtyQueueCount[SPECIALTY_ID]= {0};
 
+//Patient Data
+int assignedBed[MAX_PATIENTS];
+int admissionStatus[MAX_PATIENTS];
+int assignedWard[MAX_PATIENTS];
+int stayDuration[MAX_PATIENTS];
+
 
 int readValidInteger(const char *userPrompt, int minimumValue, int maximumValue)
 {
@@ -64,7 +70,7 @@ void displaySpecialties()
     printf("\n");
     printf("=========================================================================================================\n");
     printf("                                      DOCTOR SPECIALTIES DATA\n");
-    printf("=========================================================================================================\n");
+    printf("---------------------------------------------------------------------------------------------------------\n");
 
 
     printf("|%-12s | %-25s | %-21s | %-17s | %s|\n",
@@ -93,7 +99,7 @@ void displayWards()
     printf("\n");
     printf("========================================================================================\n");
     printf("                                     HOSPITAL WARDS\n");
-    printf("========================================================================================\n");
+    printf("----------------------------------------------------------------------------------------\n");
 
     printf("|Ward ID | %-25s | %-26s | %s|\n",
            "Ward Name", "Daily Bed Rate (LKR / Day)", "Total Bed Capacity");
@@ -125,12 +131,12 @@ void displayBedAvailability()
     printf("\n");
     printf("============================================================\n");
     printf("                    BED AVAILABILITY\n");
-    printf("============================================================\n");
+    printf("------------------------------------------------------------\n");
 
     for (int i = 0; i < WARD_ID; i++)
     {
     printf("\n%d.%s\n",i+1,wardName[i]);
-    printf("============================================================\n");
+    printf("------------------------------------------------------------\n");
 
         for (int j = 0; j < totalBedCapacity[i]; j++)
         {
@@ -149,6 +155,45 @@ void displayBedAvailability()
 }
 
 
+
+int getAvailableBed(int wardID)
+{
+   for (int bed = 0; bed < totalBedCapacity[wardID]; bed++)
+    {
+        if (bedOccupancy[wardID][bed] == 0)
+        {
+            return bed;
+        }
+
+    }
+
+    return -1;
+}
+
+void assignPatientBed(int patientId)
+{
+    int wardID = assignedWard[patientID];
+    int bed = getAvailableBed(wardID);
+
+    if (bed != -1)
+    {
+        patientBed[patientId] = bed;
+        bedOccupancy[wardID][bed] = 1;
+
+        printf("\nBed allocated successfully.\n");
+        printf("Assigned Bed : #%02d\n", bed + 1);
+    }
+    else
+    {
+        assignedBed[patientId]=-1;
+        assignedWard[patientId]=-1;
+        stayDuration[patientId]=0;
+        admissionStatus[patientId]=0;
+
+        printf("\nNo available bed in selected ward.\n");
+
+    }
+}
 
 
 int main()
