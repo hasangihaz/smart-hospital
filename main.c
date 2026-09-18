@@ -9,12 +9,14 @@
 
 
 //Doctor specialized data
-const char specialtyName[SPECIALTY_ID][50]= {"General Practice(OPD)","Paediatrics ","Cardiology","Neurology"};
+const char specialtyName[SPECIALTY_ID][50]= {"General Practice(OPD)",
+             "Paediatrics ","Cardiology","Neurology"};
 const float consultationFee[SPECIALTY_ID]= {1500.00,2500.00,4500.00,5000.00};
 const int consultationTimeInMinute[SPECIALTY_ID]= {15,20,30,30};
 const int dailyPatientCapacity[SPECIALTY_ID]= {30,20,12,10};
 //Hospital wards data
-const char wardName[WARD_ID][50]= {"General Ward","Paediatric Ward","Surgical Ward","ICU(Intensive Care Unit)"};
+const char wardName[WARD_ID][50]= {"General Ward","Paediatric Ward",
+               "Surgical Ward","ICU(Intensive Care Unit)"};
 const float dailyBedRate[WARD_ID]= {3000.00,6000.00,12000.00,25000.00};
 const int totalBedCapacity[WARD_ID]= {20,10,10,5};
 
@@ -46,9 +48,10 @@ float wardStayCost[MAX_PATIENTS];
 int patientAge[MAX_PATIENTS];
 float ageSubsidyDiscount[MAX_PATIENTS];
 float grossTotalBill[MAX_PATIENTS];
+float finalPayableAmount[MAX_PATIENTS];
 
-
-int readValidInteger(const char *userPrompt, int minimumValue, int maximumValue)
+int readValidInteger(const char *userPrompt,
+                     int minimumValue, int maximumValue)
 {
     int inputValue;
 
@@ -83,7 +86,8 @@ void displaySpecialties()
 
 
     printf("|%-12s | %-25s | %-21s | %-17s | %s|\n",
-           "Specialty ID", "Specialty Name", "Consultation Fee(LKR)", "Consultation Time", "Patient Capacity");
+           "Specialty ID", "Specialty Name", "Consultation Fee(LKR)",
+            "Consultation Time", "Patient Capacity");
 
     printf("---------------------------------------------------------------------------------------------------------\n");
 
@@ -115,7 +119,7 @@ void displayWards()
 
     printf("----------------------------------------------------------------------------------------\n");
     for (int i = 0; i < WARD_ID; i++)
-        {
+    {
         int occupiedCount = 0;
         for (int bed = 0; bed < totalBedCapacity[i]; bed++)
         {
@@ -144,8 +148,8 @@ void displayBedAvailability()
 
     for (int i = 0; i < WARD_ID; i++)
     {
-    printf("\n%d.%s\n",i+1,wardName[i]);
-    printf("------------------------------------------------------------\n");
+        printf("\n%d.%s\n",i+1,wardName[i]);
+        printf("------------------------------------------------------------\n");
 
         for (int j = 0; j < totalBedCapacity[i]; j++)
         {
@@ -167,7 +171,7 @@ void displayBedAvailability()
 
 int getAvailableBed(int wardIndex)
 {
-   for (int bed = 0; bed < totalBedCapacity[wardIndex]; bed++)
+    for (int bed = 0; bed < totalBedCapacity[wardIndex]; bed++)
     {
         if (bedOccupancy[wardIndex][bed] == 0)
         {
@@ -206,43 +210,43 @@ void assignPatientBed(int patientId)
 
 void calculateWaitingTime(int patientId)
 {
-    int specialtyId = assignedSpecialty[patientId];
-    int currentQueueCountForSpecialty = specialtyQueueCount[specialtyId];
-    int averageTimePerPatient = consultationTimeInMinute[specialtyId];
+    int specialtyIndex = assignedSpecialty[patientId];
+    int currentQueueCountForSpecialty = specialtyQueueCount[specialtyIndex];
+    int averageTimePerPatient = consultationTimeInMinute[specialtyIndex];
 
 
     int totalWaitTime = currentQueueCountForSpecialty*averageTimePerPatient;
     patientWaitTime[patientId] = totalWaitTime;
 
-    specialtyQueueCount[specialtyId]++;
+    specialtyQueueCount[specialtyIndex]++;
 }
 
- float calculateSurcharge(int patientId)
- {
-     float surcharge=0.0;
-     float baseFee=consultationBaseFee[patientId];
-     int urgencyLevel=emergencyLevel[patientId];
+float calculateSurcharge(int patientId)
+{
+    float surcharge=0.0;
+    float baseFee=consultationBaseFee[patientId];
+    int urgencyLevel=emergencyLevel[patientId];
 
-     switch(urgencyLevel)
-                {
-              case 1:
-                surcharge=0.0;
-                break;
+    switch(urgencyLevel)
+    {
+    case 1:
+        surcharge=0.0;
+        break;
 
-              case 2:
-                surcharge=baseFee*0.2;
-                break;
-              case 3:
-                surcharge=baseFee*0.5;
-                break;
+    case 2:
+        surcharge=baseFee*0.2;
+        break;
+    case 3:
+        surcharge=baseFee*0.5;
+        break;
 
-              default:
-                surcharge=0.0;
-                break;
-                }
+    default:
+        surcharge=0.0;
+        break;
+    }
 
-     return surcharge;
- }
+    return surcharge;
+}
 
 float calculateWardCost(int patientId)
 {
@@ -265,16 +269,37 @@ float calculateDiscountAmount(int patientId)
     float discountAmount = 0.0;
 
     float grossTotal = grossTotalBill[patientId];
-    int patientAge = patientAge[patientId];
+    int age = patientAge[patientId];
 
 
-    if (patientAge < 5 || patientAge > 65)
+    if (age < 5 || age > 65)
     {
         discountAmount = grossTotal * 0.15;
     }
 
     return discountAmount;
 }
+
+void calculateFinalBill(int patientId)
+{
+    int specialtyIndex= assignedSpecialty[patientId];
+
+    consultationBaseFee[patientId]= consultationFee[specialtyIndex];
+    emergencySurcharge[patientId]= calculateSurcharge(patientId);
+    wardStayCost[patientId]= calculateWardCost(patientId);
+
+    grossTotalBill[patientId]=consultationBaseFee[patientId]
+                              +emergencySurcharge[patientId]+wardStayCost[patientId];
+
+    ageSubsidyDiscount[patientId]=calculateDiscountAmount(patientId);
+
+    finalPayableAmount[patientId]=grossTotalBill[patientId]-ageSubsidyDiscount[patientId];
+
+}
+
+
+
+
 int main()
 {
     /*Test readValidInteger function
