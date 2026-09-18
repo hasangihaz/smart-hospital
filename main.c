@@ -39,9 +39,14 @@ int assignedWard[MAX_PATIENTS];
 int stayDuration[MAX_PATIENTS];
 int assignedSpecialty[MAX_PATIENTS];
 int patientWaitTime[MAX_PATIENTS];
-int getEmergencyLevel[MAX_PATIENTS];
+int emergencyLevel[MAX_PATIENTS];
 float consultationBaseFee[MAX_PATIENTS];
 float emergencySurcharge[MAX_PATIENTS];
+float wardStayCost[MAX_PATIENTS];
+int patientAge[MAX_PATIENTS];
+float ageSubsidyDiscount[MAX_PATIENTS];
+float grossTotalBill[MAX_PATIENTS];
+
 
 int readValidInteger(const char *userPrompt, int minimumValue, int maximumValue)
 {
@@ -216,7 +221,7 @@ void calculateWaitingTime(int patientId)
  {
      float surcharge=0.0;
      float baseFee=consultationBaseFee[patientId];
-     int urgencyLevel=getEmergencyLevel[patientId];
+     int urgencyLevel=emergencyLevel[patientId];
 
      switch(urgencyLevel)
                 {
@@ -239,7 +244,37 @@ void calculateWaitingTime(int patientId)
      return surcharge;
  }
 
+float calculateWardCost(int patientId)
+{
+    float totalWardStayCost = 0.0;
 
+
+    if (admissionStatus[patientId] == 1)
+    {
+        int wardIndex = assignedWard[patientId];
+        int daysAdmitted = stayDuration[patientId];
+        float wardDailyRate = dailyBedRate[wardIndex];
+
+        totalWardStayCost = daysAdmitted*wardDailyRate;
+    }
+
+    return totalWardStayCost;
+}
+float calculateDiscountAmount(int patientId)
+{
+    float discountAmount = 0.0;
+
+    float grossTotal = grossTotalBill[patientId];
+    int patientAge = patientAge[patientId];
+
+
+    if (patientAge < 5 || patientAge > 65)
+    {
+        discountAmount = grossTotal * 0.15;
+    }
+
+    return discountAmount;
+}
 int main()
 {
     /*Test readValidInteger function
