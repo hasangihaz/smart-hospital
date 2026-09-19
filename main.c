@@ -484,10 +484,52 @@ void registerPatient()
     printf("\n\n");
 
 
-    displayAdmissionSummary(currentId);
+
 }
 
+void printPatientBillSummary(void)
+{
+    int searchPatientId;
+    int isPatientFound = 0;
+    int matchedId = -1;
 
+
+    if (patientCount == 0)
+    {
+        printf("\nThere's no patients have been registered in the system yet.\n");
+        return;
+    }
+
+    printf("\n");
+    printf("============================================================\n");
+    printf("                 PRINT PATIENT PAYMENT SUMMARY \n");
+    printf("------------------------------------------------------------\n");
+
+    searchPatientId = readValidInteger("Enter Patient ID (EX. 1001): ", 1001, 1100);
+
+
+    for (int i = 0; i < patientCount; i++)
+    {
+
+        if (patientIndex[i] == searchPatientId)
+        {
+            isPatientFound = 1;
+            matchedId= i;
+            break;
+        }
+    }
+
+
+    if (isPatientFound == 1)
+    {
+        displayAdmissionSummary(matchedId);
+    }
+    else
+    {
+
+        printf("\nNo patient record was found with ID PAT-%d.\n", searchPatientId);
+    }
+}
 
 
 
