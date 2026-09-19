@@ -19,16 +19,7 @@ const char wardName[WARD_ID][50]= {"General Ward","Paediatric Ward",
                "Surgical Ward","ICU(Intensive Care Unit)"};
 const float dailyBedRate[WARD_ID]= {3000.00,6000.00,12000.00,25000.00};
 const int totalBedCapacity[WARD_ID]= {20,10,10,5};
-
-/*Test step 1
- printf("Specialty Name ID 1: %s\n", specialtyName[0]);
- printf("Base Consultation Fee: %.2f\n", consultationFee[0]);
- printf("Consultation Time: %d mins\n",consultationTimeInMinute[0]);
- printf("Daily Patient Capacity: %d\n",dailyPatientCapacity[0]);
- printf("\n");
- printf("Ward Name ID 4: %s\n", wardName[3]);
- printf("Daily Bed Rate: %.2f\n",dailyBedRate[3]);
- printf("Total Bed Capacity: %02d\n",totalBedCapacity[3]);*/
+\
 
 //Bed Status Tracking
 int bedOccupancy[WARD_ID][MAX_BEDS]= {0};
@@ -49,6 +40,8 @@ int patientAge[MAX_PATIENTS];
 float ageSubsidyDiscount[MAX_PATIENTS];
 float grossTotalBill[MAX_PATIENTS];
 float finalPayableAmount[MAX_PATIENTS];
+int patientIndex[MAX_PATIENTS];
+char patientName[MAX_PATIENTS][50];
 
 int readValidInteger(const char *userPrompt,
                      int minimumValue, int maximumValue)
@@ -298,22 +291,138 @@ void calculateFinalBill(int patientId)
 }
 
 
+void displayPatient(int patientId)
+{
+    char urgencyType[30];
+    int urgencyLevel = emergencyLevel[patientId];
+    int age = patientAge[patientId];
+    int admittedWard = admissionStatus[patientId];
+    float discountAmount = ageSubsidyDiscount[patientId];
+    int waitTime = patientWaitTime[patientId];
+
+
+    printf("\n");
+    printf("====================================================================\n");
+    printf("                 SMART HOSPITAL ADMISSION & BILL\n");
+    printf("--------------------------------------------------------------------\n");
+
+    printf("%-29s : PAT-%d\n", "Patient ID", patientIndex[patientId]);
+    printf("%-29s : %s\n", "Patient Name", patientName[patientId]);
+
+
+    if (age < 5 || age > 65)
+    {
+        printf("%-29s : %d Years (15%% Subsidy Eligible)\n", "Age", age);
+    }
+    else
+    {
+        printf("%-29s : %d Years\n", "Age", age);
+    }
+
+    printf("%-29s : %s\n", "Specialty", specialtyName[assignedSpecialty[patientId]]);
+
+
+    if (admittedWard == 1)
+    {
+        int wardIndex = assignedWard[patientId];
+        int bedNumber = assignedBed[patientId] + 1;
+        printf("%-29s : %s (Bed #%02d)\n", "Assigned Ward", wardName[wardIndex], bedNumber);
+    }
+    else
+    {
+        printf("%-25s : Non-Admitted Patient\n", "Assigned Ward");
+    }
+
+    switch(urgencyLevel)
+    {
+    case 1:
+        strcpy(urgencyType, "Level 1 (Normal)");
+        break;
+    case 2:
+        strcpy(urgencyType, "Level 2 (Urgent)");
+        break;
+    case 3:
+        strcpy(urgencyType, "Level 3 (Critical)");
+        break;
+    }
+
+    printf("%-29s : %s\n", "Urgency Level", urgencyType);
+    printf("--------------------------------------------------------------------\n");
+
+    printf("%-29s : LKR %10.2f\n", "Base Consultation Fee", consultationBaseFee[patientId]);
+    printf("%-29s : LKR %10.2f", "Emergency Surcharge", emergencySurcharge[patientId]);
+
+
+
+    if (urgencyLevel== 1)
+    {
+        printf(" (0%%)\n");
+    }
+    else if (urgencyLevel == 2)
+    {
+        printf(" (20%%)\n");
+    }
+    else
+    {
+        printf(" (50%%)\n");
+    }
+
+    if (admittedWard== 1)
+    {
+        printf("Ward Stay Cost (%d Days)       : LKR %10.2f\n", stayDuration[patientId], wardStayCost[patientId]);
+    }
+
+    printf("--------------------------------------------------------------------\n");
+
+    printf("%-29s : LKR %10.2f\n", "Gross Total Bill", grossTotalBill[patientId]);
+
+    if (discountAmount > 0)
+    {
+        printf("%-29s : LKR %10.2f (15%%)\n", "Age Subsidy Discount", -discountAmount);
+    }
+    else
+    {
+        printf("%-29s : LKR %10.2f\n", "Age Subsidy Discount", 0.00);
+    }
+
+    printf("--------------------------------------------------------------------\n");
+
+    printf("%-29s : LKR %10.2f\n", "Final Payable Amount", finalPayableAmount[patientId]);
+
+
+    if (waitTime== 0)
+    {
+        printf("%-29s : %.2f mins (Immediate Attention)\n", "Estimated Waiting Time", (float)waitTime);
+    }
+    else
+    {
+        printf("%-29s : %d mins\n", "Estimated Waiting Time", waitTime);
+    }
+
+    printf("====================================================================\n");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 int main()
 {
-    /*Test readValidInteger function
-    int age = readValidInteger("Enter your age: ", 1, 60);
-    printf(" Your age is: %d\n", age);*/
 
-    /*Test displaySpecialties function
-    displaySpecialties();*/
-
-    /*Test displayWards function
-     displayWards();*/
-
-    /*Test displayBedAvailability function
-    displayBedAvailability();*/
 
     return 0;
 }
