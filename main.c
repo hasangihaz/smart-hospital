@@ -19,7 +19,7 @@ const char wardName[WARD_ID][50]= {"General Ward","Paediatric Ward",
                "Surgical Ward","ICU(Intensive Care Unit)"};
 const float dailyBedRate[WARD_ID]= {3000.00,6000.00,12000.00,25000.00};
 const int totalBedCapacity[WARD_ID]= {20,10,10,5};
-\
+
 
 //Bed Status Tracking
 int bedOccupancy[WARD_ID][MAX_BEDS]= {0};
@@ -42,6 +42,7 @@ float grossTotalBill[MAX_PATIENTS];
 float finalPayableAmount[MAX_PATIENTS];
 int patientIndex[MAX_PATIENTS];
 char patientName[MAX_PATIENTS][50];
+int patientCount=0;
 
 int readValidInteger(const char *userPrompt,
                      int minimumValue, int maximumValue)
@@ -291,7 +292,7 @@ void calculateFinalBill(int patientId)
 }
 
 
-void displayPatient(int patientId)
+void displayAdmissionSummary(int patientId)
 {
     char urgencyType[30];
     int urgencyLevel = emergencyLevel[patientId];
@@ -402,18 +403,89 @@ void displayPatient(int patientId)
     printf("====================================================================\n");
 }
 
+void registerPatient()
+{
+    int currentId = patientCount;
+    int selectedSpecialty;
+    int admittedState;
+    int selectedWard;
+
+    patientIndex[currentId] = 1001 + currentId;
+
+    printf("\n");
+    printf("============================================================\n");
+    printf("                   PATIENT REGISTRATION\n");
+    printf("------------------------------------------------------------\n");
+
+    printf("Enter patient Full name: ");
+    scanf(" %[^\n]", patientName[currentId]);
+
+    patientAge[currentId] = readValidInteger("Enter age: ", 1, 110);
+
+    printf("\nEmergency Level:\n");
+    printf("1. Normal\n");
+    printf("2. Urgent\n");
+    printf("3. Critical\n");
+    emergencyLevel[currentId] = readValidInteger("Select Patient Emergency Level: ", 1, 3);
 
 
+    displaySpecialties();
+    selectedSpecialty = readValidInteger("Enter specialty ID No: ", 1, SPECIALTY_ID);
 
 
+    assignedSpecialty[currentId] = selectedSpecialty - 1;
 
 
+    int currentSpecialtyId = assignedSpecialty[currentId];
+
+    if (specialtyQueueCount[currentSpecialtyId] >= dailyPatientCapacity[currentSpecialtyId])
+    {
+        printf("\nNote:%s has reached the maximum number (%d) of patients for today.\n",
+               specialtyName[currentSpecialtyId],
+               dailyPatientCapacity[currentSpecialtyId]);
+
+    }
+
+    calculateWaitingTime(currentId);
+
+    printf("Do you require hospital admission?\n");
+    printf("1. Yes\n");
+    printf("0. No\n");
+
+    admittedState = readValidInteger("Enter your choice: ", 0, 1);
+    admissionStatus[currentId] = admittedState;
+
+    if (admittedState== 1)
+    {
+        displayWards();
+        selectedWard = readValidInteger("Enter ward ID NO: ", 1, WARD_ID);
+
+        assignedWard[currentId] = selectedWard - 1;
+        stayDuration[currentId] = readValidInteger("Enter the expected number of days of stay: ", 1, 365);
+
+        assignPatientBed(currentId);
+    }
+    else
+    {
+        assignedWard[currentId] = -1;
+        assignedBed[currentId] = -1;
+        stayDuration[currentId] = 0;
+    }
 
 
+    calculateFinalBill(currentId);
+
+    patientCount++;
+    printf("\n");
+    printf("        +------------------------------------------+\n");
+    printf("        |            REGISTRATION COMPLETED        |\n");
+    printf("        +------------------------------------------+\n");
+    printf("        Patient record has been successfully created.\n");
+    printf("\n\n");
 
 
-
-
+    displayAdmissionSummary(currentId);
+}
 
 
 
@@ -426,3 +498,5 @@ int main()
 
     return 0;
 }
+
+
