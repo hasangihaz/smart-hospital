@@ -487,7 +487,7 @@ void registerPatient()
 
 }
 
-void printPatientBillSummary(void)
+void printPatientBillSummary()
 {
     int searchPatientId;
     int isPatientFound = 0;
@@ -532,6 +532,88 @@ void printPatientBillSummary(void)
 }
 
 
+void sortPatientsByPriority()
+{
+    for (int i = 0; i < patientCount - 1; i++)
+    {
+        for (int j = 0; j < patientCount - 1 - i; j++)
+        {
+
+            if (emergencyLevel[j] < emergencyLevel[j + 1])
+            {
+                // swap patient related data
+                int temporaryPatientId = patientIndex[j];
+                patientIndex[j] = patientIndex[j + 1];
+                patientIndex[j + 1] = temporaryPatientId;
+
+                char temporaryPatientName[50];
+                strcpy(temporaryPatientName, patientName[j]);
+                strcpy(patientName[j], patientName[j + 1]);
+                strcpy(patientName[j + 1], temporaryPatientName);
+
+                int temporaryPatientAge = patientAge[j];
+                patientAge[j] = patientAge[j + 1];
+                patientAge[j + 1] = temporaryPatientAge;
+
+                int temporaryEmergencyLevel = emergencyLevel[j];
+                emergencyLevel[j] = emergencyLevel[j + 1];
+                emergencyLevel[j + 1] = temporaryEmergencyLevel;
+
+
+                // 2. swap specialty and wards related data
+                int temporarySpecialtyIndex = assignedSpecialty[j];
+                assignedSpecialty[j] = assignedSpecialty[j + 1];
+                assignedSpecialty[j + 1] = temporarySpecialtyIndex;
+
+                int temporaryAdmissionStatus = admissionStatus[j];
+                admissionStatus[j] = admissionStatus[j + 1];
+                admissionStatus[j + 1] = temporaryAdmissionStatus;
+
+                int temporaryWardIndex = assignedWard[j];
+                assignedWard[j] = assignedWard[j + 1];
+                assignedWard[j + 1] = temporaryWardIndex;
+
+                int temporaryBedNumber = assignedBed[j];
+                assignedBed[j] = assignedBed[j + 1];
+                assignedBed[j + 1] = temporaryBedNumber;
+
+                int temporaryStayDuration = stayDuration[j];
+                stayDuration[j] = stayDuration[j + 1];
+                stayDuration[j + 1] = temporaryStayDuration;
+
+                int temporaryWaitTime = patientWaitTime[j];
+                patientWaitTime[j] = patientWaitTime[j + 1];
+                patientWaitTime[j + 1] = temporaryWaitTime;
+
+
+                // 3. swap bill related data
+                float temporaryBaseFee = consultationBaseFee[j];
+                consultationBaseFee[j] = consultationBaseFee[j + 1];
+                consultationBaseFee[j + 1] = temporaryBaseFee;
+
+                float temporarySurchargeAmount = emergencySurcharge[j];
+                emergencySurcharge[j] = emergencySurcharge[j + 1];
+                emergencySurcharge[j + 1] = temporarySurchargeAmount;
+
+                float temporaryWardCost = wardStayCost[j];
+                wardStayCost[j] = wardStayCost[j + 1];
+                wardStayCost[j + 1] = temporaryWardCost;
+
+                float temporaryGrossBill = grossTotalBill[j];
+                grossTotalBill[j] = grossTotalBill[j + 1];
+                grossTotalBill[j + 1] = temporaryGrossBill;
+
+                float temporaryDiscountAmount = ageSubsidyDiscount[j];
+                ageSubsidyDiscount[j] = ageSubsidyDiscount[j + 1];
+                ageSubsidyDiscount[j + 1] = temporaryDiscountAmount;
+
+                float temporaryFinalPayable = finalPayableAmount[j];
+                finalPayableAmount[j] = finalPayableAmount[j + 1];
+                finalPayableAmount[j + 1] = temporaryFinalPayable;
+            }
+        }
+    }
+}
 
 
 int main()
