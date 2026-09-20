@@ -10,39 +10,39 @@ The system helps manage patients, hospital beds, emergency priority, medical fee
 
 ## Features
 
-* **Patient Registration** — Register a patient with their name, age, emergency level, medical specialty, and ward admission details.
+Patient Registration - Register a patient with their name, age, emergency level, medical specialty, and ward admission details.
 
-* **Specialty Selection** — Supports 4 medical specialties:
+Specialty Selection-Supports 4 medical specialties:
 
-  * General Practice / OPD
-  * Paediatrics
-  * Cardiology
-  * Neurology
+  - General Practice / OPD
+  - Paediatrics
+  - Cardiology
+  - Neurology
 
-* **Ward Management** — Supports 4 hospital wards:
+Ward Management- Supports 4 hospital wards:
 
-  * General Ward
-  * Paediatric Ward
-  * Surgical Ward
-  * ICU
+  - General Ward
+  - Paediatric Ward
+  - Surgical Ward
+  - ICU
 
-* **Bed Management** — Shows available and occupied beds in each ward.
+Bed Management-Shows available and occupied beds in each ward.
 
-* **Patient Billing** — Calculates consultation fees, emergency charges, ward costs, discounts, and the final amount to pay.
+Patient Billing- Calculates consultation fees, emergency charges, ward costs, discounts, and the final amount to pay.
 
-* **Emergency Priority** — Patients are given three priority levels:
+Emergency Priority-Patients are given three priority levels:
 
-  * Level 3 — Critical
-  * Level 2 — Urgent
-  * Level 1 — Normal
+   Level 3 - Critical
+   Level 2 - Urgent
+   Level 1 - Normal
 
-* **Waiting Time** — Calculates the estimated waiting time based on the number of patients waiting and the consultation time.
+Waiting Time - Calculates the estimated waiting time based on the number of patients waiting and the consultation time.
 
-* **Priority Sorting** — Patients are sorted from Critical to Urgent to Normal using Bubble Sort. If two patients have the same priority, their registration order is kept.
+Priority Sorting -Patients are sorted from Critical to Urgent to Normal using Bubble Sort. If two patients have the same priority, their registration order is kept.
 
-* **Hospital Report** — Displays patient numbers, emergency levels, total income, total discounts, bed usage, and the patient with the highest payment.
+Hospital Report- Displays patient numbers, emergency levels, total income, total discounts, bed usage, and the patient with the highest payment.
 
-* **File Saving** — Saves bed information and patient billing records into text files. The saved data can be used again when the program is opened.
+File Saving - Saves bed information and patient billing records into text files. The saved data can be used again when the program is opened.
 
 ---
 
@@ -50,13 +50,13 @@ The system helps manage patients, hospital beds, emergency priority, medical fee
 
 To run this program, you need:
 
-* A C compiler such as **GCC**
-* Works on **Windows, Linux, and macOS**
-* No external libraries are required
-* Uses only standard C libraries:
+ A C compiler such as **GCC**
+ Works on **Windows, Linux, and macOS**
+ No external libraries are required
+ Uses only standard C libraries:
 
-  * `stdio.h`
-  * `string.h`
+  -stdio.h
+  -string.h
 
 ---
 
@@ -127,10 +127,9 @@ The program provides the following main menu:
 
 The program creates and uses two text files to store important information.
 
-| File                  | Purpose                                                                                    |
-| --------------------- | ------------------------------------------------------------------------------------------ |
-| `beds_status.txt`     | Stores the current bed occupancy information.                                              |
-| `patient_records.txt` | Stores patient billing records such as patient ID, patient name, and final payment amount. |
+ 
+   beds_status.txt     - Stores the current bed occupancy information.                                             
+   patient_records.txt - Stores patient billing records such as patient ID, patient name, and final payment amount. 
 
 These files are created automatically by the program when they are needed. They do not need to be created manually.
 
@@ -145,29 +144,29 @@ smart-hospital/
 
 - main.c
 - beds_status.txt
--patient_records.txt
+- patient_records.txt
 - README.md
 ```
 
 ### File Description
 
-* **`main.c`**- Contains the complete C program and its functions.
+main.c -Contains the complete C program and its functions.
 
-* **`beds_status.txt`** -Stores the current bed occupancy information.
+beds_status.txt -Stores the current bed occupancy information.
 
-* **`patient_records.txt`**- Stores patient billing records.
+patient_records.txt - Stores patient billing records.
 
-* **`README.md`** -Contains information about the project, its features, requirements, compilation, and usage.
+README.md -Contains information about the project, its features, requirements, compilation, and usage.
 
 ---
 
 ## Technologies Used
 
-* C Programming Language
-* Code::Blocks
-* GCC Compiler
-* Git
-* GitHub
+  C Programming Language
+  Code::Blocks
+  GCC Compiler
+  Git
+  GitHub
 
 ---
 
@@ -175,11 +174,10 @@ smart-hospital/
 
 The program mainly uses:
 
-* 1D arrays for patient information
-* 2D arrays for bed information
-* Variables for patient, billing, and hospital data
+  1D arrays for patient information
+  2D arrays for bed information
+  Variables for patient, billing, and hospital data
 
-The project does not use `struct`.
 
 ---
 
@@ -190,6 +188,7 @@ The program uses **Bubble Sort** to arrange patients according to their emergenc
 The priority order is:
 
 ```text
+
 1. Level 3 — Critical
        
 2. Level 2 — Urgent
