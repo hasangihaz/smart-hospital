@@ -162,11 +162,13 @@ README.md -Contains information about the project, its features, requirements, c
 
 ## Technologies Used
 
+   ```text
   -C Programming Language
   -Code::Blocks
   -GCC Compiler
   -Git
   -GitHub
+  ```
 
 ---
 
