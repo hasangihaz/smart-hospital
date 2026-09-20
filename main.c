@@ -842,7 +842,7 @@ void savePatientRecords()
     }
 
     fclose(myFile);
-    printf("Patient record data has been successfully updated.\n");
+    printf("\nPatient record data has been successfully updated.\n");
 }
 
 
@@ -871,19 +871,19 @@ int main()
         printf("                  * MAIN MENU *\n");
         printf("\n");
 
-        printf("               01 - Register Patient\n");
-        printf("               02 - Display Bed Availability\n");
-        printf("               03 - Patient Bill Statement\n");
-        printf("               04 - Display Patient Priority\n");
-        printf("               05 - Generate Hospital Summary Report\n");
-        printf("               06 - Update Bed Occupancy\n");
-        printf("               07 - Save Patient Records\n");
-        printf("               08 - Exit\n");
+        printf("           01 - Register Patient\n");
+        printf("           02 - Display Bed Availability\n");
+        printf("           03 - Patient Bill Statement\n");
+        printf("           04 - Display Patient Priority\n");
+        printf("           05 - Generate Hospital Summary Report\n");
+        printf("           06 - Update Bed Occupancy\n");
+        printf("           07 - Save Patient Records\n");
+        printf("           08 - Exit\n");
 
         printf("\n");
-        printf("               ------------------------\n");
+        printf("           ------------------------\n");
 
-        menuChoice = readValidInteger("               Enter your choice>> ", 1, 8);
+        menuChoice = readValidInteger("           Enter your choice>> ", 1, 8);
 
         switch (menuChoice)
         {
@@ -940,6 +940,7 @@ int main()
 
         case 6:
             saveBedOccupancyStatus();
+            printf("\nBed occupancy status updated successfully.\n");
             break;
 
         case 7:
