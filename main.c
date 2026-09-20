@@ -716,6 +716,88 @@ void generateSummaryReport()
 }
 
 
+void saveBedOccupancyStatus()
+{
+    // Named the file pointer 'myFile'
+    FILE *myFile;
+
+    // Used write mode because need to overwrite the old bed data with the new data
+    myFile = fopen("beds_status.txt", "w");
+
+    // Show an error if the file cannot't be opened or created
+    if (myFile == NULL)
+    {
+       printf("Warning: Unable to access the bed status file.\n");
+        return;
+    }
+
+    for (int wardIndex = 0; wardIndex < WARD_ID; wardIndex++)
+    {
+        for (int bedIndex = 0; bedIndex < totalBedCapacity[wardIndex]; bedIndex++)
+        {
+
+            fprintf(myFile, "%d ", bedOccupancy[wardIndex][bedIndex]);
+        }
+        fprintf(myFile, "\n");
+    }
+
+    fclose(myFile);
+    printf("Bed occupancy status updated successfully.\n");
+}
+
+
+
+void loadBedOccupancyStatus()
+{
+    FILE *myFile;
+
+    // Opened the file in read mode to read the saved data
+    myFile = fopen("beds_status.txt", "r");
+
+
+    if (myFile == NULL)
+    {
+        printf("Note: No previous bed status file found. Starting with empty beds.\n");
+        return;
+    }
+
+    for (int wardIndex = 0; wardIndex < WARD_ID; wardIndex++)
+    {
+        for (int bedIndex = 0; bedIndex < totalBedCapacity[wardIndex]; bedIndex++)
+        {
+
+            fscanf(myFile, "%d", &bedOccupancy[wardIndex][bedIndex]);
+        }
+    }
+
+    fclose(myFile);
+}
+
+
+
+
+void savePatientRecords()
+{
+    FILE *myFile;
+
+    //used append mode to add new patients to the bottom without deleting old ones.
+    myFile = fopen("patient_records.txt", "a");
+
+    if (myFile == NULL)
+    {
+        printf("Warning: Unable to access the patient records file.\n");
+        return;
+    }
+
+    for (int i = 0; i < patientCount; i++)
+    {
+        fprintf(myFile, "PAT-%d, %s, LKR %.2f\n",
+                patientIndex[i], patientName[i], finalPayableAmount[i]);
+    }
+
+    fclose(myFile);
+    printf("Patient record data has been successfully updated.\n");
+}
 
 int main()
 {
