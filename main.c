@@ -42,7 +42,7 @@ float grossTotalBill[MAX_PATIENTS];
 float finalPayableAmount[MAX_PATIENTS];
 int patientIndex[MAX_PATIENTS];
 char patientName[MAX_PATIENTS][50];
-int patientCount=0;
+int patientCount=1;
 
 int readValidInteger(const char *userPrompt,
                      int minimumValue, int maximumValue)
@@ -614,6 +614,107 @@ void sortPatientsByPriority()
         }
     }
 }
+
+void generateSummaryReport()
+{
+    int normalCount = 0;
+    int urgentCount = 0;
+    int criticalCount = 0;
+
+    float totalRevenue = 0.0;
+    float totalDiscount = 0.0;
+
+    int highestPayingPatientIndex = 0;
+
+    for (int i = 0; i < patientCount; i++)
+    {
+        switch (emergencyLevel[i])
+        {
+        case 1:
+            normalCount++;
+            break;
+        case 2:
+            urgentCount++;
+            break;
+        case 3:
+            criticalCount++;
+            break;
+        }
+
+        totalRevenue += finalPayableAmount[i];
+        totalDiscount += ageSubsidyDiscount[i];
+
+        if (i == 0 ||
+            finalPayableAmount[i] > finalPayableAmount[highestPayingPatientIndex])
+        {
+            highestPayingPatientIndex = i;
+        }
+    }
+
+    printf("\n");
+    printf("|==============================================================|\n");
+    printf("|                                                              |\n");
+    printf("|                 SMART HOSPITAL SUMMARY REPORT                |\n");
+    printf("|--------------------------------------------------------------|\n");
+    printf("|                       PATIENT OVERVIEW                       |\n");
+    printf("|--------------------------------------------------------------|\n");
+
+    printf("|  %-31s: %-27d|\n", "Total Registered Patients", patientCount);
+    printf("|                                                              |\n");
+
+    printf("|  %-60s|\n", "URGENCY DISTRIBUTION");
+    printf("|    %-29s: %-27d|\n", "* Level 1 - Normal", normalCount);
+    printf("|    %-29s: %-27d|\n", "* Level 2 - Urgent", urgentCount);
+    printf("|    %-29s: %-27d|\n", "* Level 3 - Critical", criticalCount);
+
+    printf("|--------------------------------------------------------------|\n");
+    printf("|                      FINANCIAL OVERVIEW                      |\n");
+    printf("|--------------------------------------------------------------|\n");
+
+    printf("|  %-31s: LKR %-23.2f|\n", "Total Revenue", totalRevenue);
+    printf("|  %-31s: LKR %-23.2f|\n", "Total Discounts", totalDiscount);
+
+    printf("|--------------------------------------------------------------|\n");
+    printf("|                        BED OCCUPANCY                         |\n");
+    printf("|--------------------------------------------------------------|\n");
+
+    for (int wardIndex = 0; wardIndex < WARD_ID; wardIndex++)
+    {
+        int occupiedBeds = 0;
+
+        for (int bedIndex = 0;
+             bedIndex < totalBedCapacity[wardIndex];
+             bedIndex++)
+        {
+            if (bedOccupancy[wardIndex][bedIndex] == 1)
+                occupiedBeds++;
+        }
+
+        float bedOccupancyPercentage =
+            ((float)occupiedBeds / totalBedCapacity[wardIndex]) * 100;
+
+
+        char bedInfo[30];
+        sprintf(bedInfo, "%02d/%02d beds (%6.2f%%)",
+                occupiedBeds, totalBedCapacity[wardIndex], bedOccupancyPercentage);
+
+        printf("|  %-31s: %-27s|\n", wardName[wardIndex], bedInfo);
+    }
+
+    if (patientCount > 0)
+    {
+        printf("|--------------------------------------------------------------|\n");
+        printf("|                     FINANCIAL HIGHLIGHT                      |\n");
+        printf("|--------------------------------------------------------------|\n");
+
+        printf("|  %-60s|\n", "Highest Paying Patient");
+        printf("|    %-29s: %-27s|\n", "Patient Name", patientName[highestPayingPatientIndex]);
+        printf("|    %-29s: LKR %-23.2f|\n", "Payable Amount", finalPayableAmount[highestPayingPatientIndex]);
+    }
+
+        printf("|==============================================================|\n");
+}
+
 
 
 int main()
