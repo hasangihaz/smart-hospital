@@ -7,19 +7,19 @@
 #define MAX_BEDS 20
 
 
-
 //Doctor specialized data
 const char specialtyName[SPECIALTY_ID][50]= {"General Practice(OPD)",
-             "Paediatrics ","Cardiology","Neurology"};
+                                             "Paediatrics ","Cardiology","Neurology"};
 const float consultationFee[SPECIALTY_ID]= {1500.00,2500.00,4500.00,5000.00};
 const int consultationTimeInMinute[SPECIALTY_ID]= {15,20,30,30};
 const int dailyPatientCapacity[SPECIALTY_ID]= {30,20,12,10};
+
 //Hospital wards data
 const char wardName[WARD_ID][50]= {"General Ward","Paediatric Ward",
-               "Surgical Ward","ICU(Intensive Care Unit)"};
+                                   "Surgical Ward","ICU(Intensive Care Unit)"
+                                  };
 const float dailyBedRate[WARD_ID]= {3000.00,6000.00,12000.00,25000.00};
 const int totalBedCapacity[WARD_ID]= {20,10,10,5};
-
 
 //Bed Status Tracking
 int bedOccupancy[WARD_ID][MAX_BEDS]= {0};
@@ -81,7 +81,7 @@ void displaySpecialties()
 
     printf("|%-12s | %-25s | %-21s | %-17s | %s|\n",
            "Specialty ID", "Specialty Name", "Consultation Fee(LKR)",
-            "Consultation Time", "Patient Capacity");
+           "Consultation Time", "Patient Capacity");
 
     printf("---------------------------------------------------------------------------------------------------------\n");
 
@@ -303,9 +303,9 @@ void displayAdmissionSummary(int patientId)
 
 
     printf("\n");
-    printf("==============================================================\n");
+    printf("================================================================\n");
     printf("                 SMART HOSPITAL ADMISSION & BILL\n");
-    printf("--------------------------------------------------------------\n");
+    printf("----------------------------------------------------------------\n");
 
     printf("%-29s : PAT-%d\n", "Patient ID", patientIndex[patientId]);
     printf("%-29s : %s\n", "Patient Name", patientName[patientId]);
@@ -348,7 +348,7 @@ void displayAdmissionSummary(int patientId)
     }
 
     printf("%-29s : %s\n", "Urgency Level", urgencyType);
-    printf("--------------------------------------------------------------\n");
+    printf("----------------------------------------------------------------\n");
 
     printf("%-29s : LKR %10.2f\n", "Base Consultation Fee", consultationBaseFee[patientId]);
     printf("%-29s : LKR %10.2f", "Emergency Surcharge", emergencySurcharge[patientId]);
@@ -373,7 +373,7 @@ void displayAdmissionSummary(int patientId)
         printf("Ward Stay Cost (%d Days)       : LKR %10.2f\n", stayDuration[patientId], wardStayCost[patientId]);
     }
 
-    printf("--------------------------------------------------------------\n");
+    printf("----------------------------------------------------------------\n");
 
     printf("%-29s : LKR %10.2f\n", "Gross Total Bill", grossTotalBill[patientId]);
 
@@ -386,7 +386,7 @@ void displayAdmissionSummary(int patientId)
         printf("%-29s : LKR %10.2f\n", "Age Subsidy Discount", 0.00);
     }
 
-    printf("--------------------------------------------------------------\n");
+    printf("----------------------------------------------------------------\n");
 
     printf("%-29s : LKR %10.2f\n", "Final Payable Amount", finalPayableAmount[patientId]);
 
@@ -400,7 +400,7 @@ void displayAdmissionSummary(int patientId)
         printf("%-29s : %d mins\n", "Estimated Waiting Time", waitTime);
     }
 
-    printf("==============================================================\n");
+    printf("================================================================\n");
 }
 
 void registerPatient()
@@ -476,16 +476,15 @@ void registerPatient()
     calculateFinalBill(currentId);
 
     patientCount++;
+
     printf("\n");
     printf("        +-------------------------------------------------+\n");
-    printf("        |            REGISTRATION COMPLETED               |\n");
+    printf("        |             REGISTRATION COMPLETED              |\n");
     printf("        +-------------------------------------------------+\n");
-    printf("        |Patient record has been successfully created.    |\n");
-    printf("        |Patient ID : PAT-%d                              |\n",patientIndex[currentId]);
+    printf("        | Patient record has been successfully created.   |\n");
+    printf("        | Patient ID : PAT-%-31d|\n", patientIndex[currentId]);
     printf("        +-------------------------------------------------+\n");
     printf("\n\n");
-
-
 
 }
 
@@ -503,9 +502,9 @@ void printPatientBillSummary()
     }
 
     printf("\n");
-    printf("============================================================\n");
+    printf("================================================================\n");
     printf("                 PRINT PATIENT PAYMENT SUMMARY \n");
-    printf("------------------------------------------------------------\n");
+    printf("----------------------------------------------------------------\n");
 
     searchPatientId = readValidInteger("Enter Patient ID (EX. 1001): ", 1001, 1100);
 
@@ -663,7 +662,7 @@ void displayPatientBasicInfo(int patientId)
     }
 
     printf("%-29s : %s\n", "Urgency Level", urgencyType);
-    printf("------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------\n");
 }
 
 void generateSummaryReport()
@@ -696,7 +695,7 @@ void generateSummaryReport()
         totalDiscount += ageSubsidyDiscount[i];
 
         if (i == 0 ||
-            finalPayableAmount[i] > finalPayableAmount[highestPayingPatientIndex])
+                finalPayableAmount[i] > finalPayableAmount[highestPayingPatientIndex])
         {
             highestPayingPatientIndex = i;
         }
@@ -734,8 +733,8 @@ void generateSummaryReport()
         int occupiedBeds = 0;
 
         for (int bedIndex = 0;
-             bedIndex < totalBedCapacity[wardIndex];
-             bedIndex++)
+                bedIndex < totalBedCapacity[wardIndex];
+                bedIndex++)
         {
             if (bedOccupancy[wardIndex][bedIndex] == 1)
                 occupiedBeds++;
@@ -763,7 +762,7 @@ void generateSummaryReport()
         printf("|    %-29s: LKR %-23.2f|\n", "Payable Amount", finalPayableAmount[highestPayingPatientIndex]);
     }
 
-        printf("|==============================================================|\n");
+    printf("|==============================================================|\n");
 }
 
 
@@ -778,7 +777,7 @@ void saveBedOccupancyStatus()
     // Show an error if the file cannot't be opened or created
     if (myFile == NULL)
     {
-       printf("Warning: Unable to access the bed status file.\n");
+        printf("Warning: Unable to access the bed status file.\n");
         return;
     }
 
@@ -794,7 +793,6 @@ void saveBedOccupancyStatus()
 
     fclose(myFile);
 }
-
 
 
 void loadBedOccupancyStatus()
@@ -824,8 +822,6 @@ void loadBedOccupancyStatus()
 }
 
 
-
-
 void savePatientRecords()
 {
     FILE *myFile;
@@ -850,8 +846,6 @@ void savePatientRecords()
 }
 
 
-
-
 int main()
 {
     int menuChoice;
@@ -859,108 +853,110 @@ int main()
     loadBedOccupancyStatus();
 
     do
-   { printf("\n\n\n");
-     printf("          +-------+       +------------+\n");
-     printf("----------| <<<<< |-------|  MEDICARE  |-----------\n");
-     printf("          +---+---+       +------+-----+\n");
-     printf("              |                   |\n");
-     printf("              |      HEALTH       |\n");
-     printf("--------------+----MANAGEMENT-----+----------------\n");
-     printf("              |       SYSTEM      |\n");
-     printf("              |                   |\n");
-     printf("          +---+---+       +-------+------+\n");
-     printf("----------| >>>>> |-------|     2026     |---------\n");
-     printf("          +-------+       +--------------+\n");
-     printf("\n");
+    {
+        printf("\n\n\n");
+        printf("          +-------+       +------------+\n");
+        printf("----------| <<<<< |-------|  MEDICARE  |-----------\n");
+        printf("          +---+---+       +------+-----+\n");
+        printf("              |                   |\n");
+        printf("              |      HEALTH       |\n");
+        printf("--------------+----MANAGEMENT-----+----------------\n");
+        printf("              |       SYSTEM      |\n");
+        printf("              |                   |\n");
+        printf("          +---+---+       +-------+------+\n");
+        printf("----------| >>>>> |-------|     2026     |---------\n");
+        printf("          +-------+       +--------------+\n");
+        printf("\n");
 
-    printf("                  * MAIN MENU *\n");
-    printf("\n");
+        printf("                  * MAIN MENU *\n");
+        printf("\n");
 
-    printf("               01 - Register Patient\n");
-    printf("               02 - Display Bed Availability\n");
-    printf("               03 - Print Patient Bill & Invoice\n");
-    printf("               04 - Display Patient Priority\n");
-    printf("               05 - Generate Hospital Report\n");
-    printf("               06 - Save Bed Status\n");
-    printf("               07 - Save Patient Records\n");
-    printf("               08 - Exit\n");
+        printf("               01 - Register Patient\n");
+        printf("               02 - Display Bed Availability\n");
+        printf("               03 - Patient Bill Statement\n");
+        printf("               04 - Display Patient Priority\n");
+        printf("               05 - Generate Hospital Summary Report\n");
+        printf("               06 - Update Bed Occupancy\n");
+        printf("               07 - Save Patient Records\n");
+        printf("               08 - Exit\n");
 
-    printf("\n");
-    printf("               ------------------------\n");
+        printf("\n");
+        printf("               ------------------------\n");
 
-    menuChoice = readValidInteger("               Enter your choice>> ", 1, 8);
+        menuChoice = readValidInteger("               Enter your choice>> ", 1, 8);
 
         switch (menuChoice)
         {
-            case 1:
-                if (patientCount < MAX_PATIENTS)
-                {
-                    registerPatient();
-                }
-                else
-                {
+        case 1:
+            if (patientCount < MAX_PATIENTS)
+            {
+                registerPatient();
+            }
+            else
+            {
                 printf("\nPatient Registration Unavailable: Maximum capacity of %d patients reached.\n", MAX_PATIENTS);
-                }
-                break;
+            }
+            break;
 
 
-                 case 2:
+        case 2:
 
-                displayBedAvailability();
-                break;
+            displayBedAvailability();
+            break;
 
-                 case 3:
-                 printPatientBillSummary();
-                 break;
+        case 3:
+            printPatientBillSummary();
+            break;
 
 
-            case 4:
-                if (patientCount == 0)
+        case 4:
+            if (patientCount == 0)
+            {
+                printf("\nNo patient records are currently available.\n");
+            }
+            else
+            {
+                sortPatientsByPriority();
+
+                printf("\n");
+                printf("==================================================================\n");
+                printf("               PATIENTS SORTED BY EMERGENCY PRIORITY\n");
+                printf("                   (Critical >> Urgent >> Normal)\n");
+                printf("------------------------------------------------------------------\n");
+
+                for (int i = 0; i < patientCount; i++)
                 {
-                    printf("\nNo patient records are currently available.\n");
+
+                    displayPatientBasicInfo(i);
                 }
-                else
-                {
-                    sortPatientsByPriority();
+            }
+            break;
 
-                    printf("\n");
-                    printf("============================================================\n");
-                    printf("             PATIENTS SORTED BY EMERGENCY PRIORITY\n");
-                    printf("             (Critical >> Urgent >> Normal)\n");
-                    printf("------------------------------------------------------------\n");
-
-                    for (int i = 0; i < patientCount; i++)
-                    {
-
-                        displayPatientBasicInfo(i);
-                    }
-                }
-                break;
-
-            case 5:
-                generateSummaryReport();
-                break;
+        case 5:
+            generateSummaryReport();
+            break;
 
 
 
-            case 6:
-                saveBedOccupancyStatus();
-                break;
+        case 6:
+            saveBedOccupancyStatus();
+            break;
 
-            case 7:
-                savePatientRecords();
-                break;
+        case 7:
+            savePatientRecords();
+            break;
 
-            case 8:
+        case 8:
 
-                // Save the current bed occupancy status to file before exiting
-                saveBedOccupancyStatus();
-                printf("\nExiting Smart Hospital System.\n");
-                printf("Thank you for using MEDICARE Hospital Management System.\n");
-                break;
+            // Save the current bed occupancy status to file before exiting
+            saveBedOccupancyStatus();
+            printf("\nExiting Smart Hospital System.\n");
+            printf("Thank you for using MEDICARE Hospital Management System.\n");
+            break;
         }
 
-    } while (menuChoice != 8);
+    }
+    while (menuChoice != 8);
 
     return 0;
 }
